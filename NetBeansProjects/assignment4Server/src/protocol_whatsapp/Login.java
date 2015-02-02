@@ -9,7 +9,7 @@ package protocol_whatsapp;
  *
  * @author chen
  */
-public class Login {
+public class Login extends RequestURI{
     private String _userName;
     private String _phoneNumber;
     private String _cookie;

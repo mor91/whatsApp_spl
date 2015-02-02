@@ -11,7 +11,7 @@ import java.util.Queue;
  *
  * @author chen
  */
-public class MassegesQueue {
+public class MassegesQueue extends RequestURI{
     private String _userName;
     private Queue _massegesQueue;
 

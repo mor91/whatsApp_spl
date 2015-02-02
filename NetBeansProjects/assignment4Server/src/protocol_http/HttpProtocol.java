@@ -5,16 +5,16 @@
  */
 package protocol_http;
 import java.net.URI;
-import org.apache.http.HttpMessage;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.ProtocolVersion;
-import org.apache.http.StatusLine;
-import org.apache.http.message.BasicHttpRequest;
-import org.apache.http.message.BasicHttpResponse;
-import org.apache.http.message.BasicStatusLine;
 import java.util.Map;
-
+import protocol_whatsapp.AddUser;
+import protocol_whatsapp.CreateGroup;
+import protocol_whatsapp.List;
+import protocol_whatsapp.Login;
+import protocol_whatsapp.Logout;
+import protocol_whatsapp.MassegesQueue;
+import protocol_whatsapp.RemoveUser;
+import protocol_whatsapp.RequestURI;
+import protocol_whatsapp.Send;
 
 /**
  *
@@ -25,18 +25,31 @@ public class HttpProtocol<T> implements protocol.ServerProtocol{
     @Override
     public Object processMessage(Object msg) {
         boolean isValidUri=false;
+        RequestURI requestURI;
          if(((Map<String,String>)msg).containsKey("POST")){
              if(((Map<String,String>)msg).get("POST").compareTo("login.jsp")==0){
                  isValidUri=true;
+                 String userName=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
+                 String phoneNumber=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
+                 requestURI=new Login(userName, phoneNumber);
              }
              if(((Map<String,String>)msg).get("POST").compareTo("list.jsp")==0){
                  isValidUri=true;
+                 requestURI=new List(((Map<String,String>)msg).get("massegeBody").split("=")[1]);
              }
              if(((Map<String,String>)msg).get("POST").compareTo("create_group.jsp")==0){
                  isValidUri=true;
+                 String groupName=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
+                 String[] users=((Map<String,String>)msg).get("massegeBody").split("&");
+                 requestURI=new CreateGroup(groupName);
+                 for(int i=1;i<users.length;i++){
+                    ((CreateGroup)requestURI).addUserToGroup(users[i].split("=")[1]);
+                 }
              }
              if(((Map<String,String>)msg).get("POST").compareTo("send.jsp")==0){
                  isValidUri=true;
+                 
+                 requestURI=new Send(null, null, null);
              }
              if(((Map<String,String>)msg).get("POST").compareTo("add_user.jsp")==0){
                  isValidUri=true;
@@ -61,7 +74,7 @@ public class HttpProtocol<T> implements protocol.ServerProtocol{
             //check 
         }
        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return msg;
     }
 
     @Override
@@ -70,11 +83,7 @@ public class HttpProtocol<T> implements protocol.ServerProtocol{
     }
     public URI processRequestMassege(Object msg){
         return null;
-    } 
-    public HttpResponse processResponseMessage(Object msg){
-        int statusCode=0;
-        StatusLine statusLine=new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), statusCode, null);
-        HttpResponse response=new BasicHttpResponse(statusLine);
-        return response;
-    } 
+    }
+    
+   
 }

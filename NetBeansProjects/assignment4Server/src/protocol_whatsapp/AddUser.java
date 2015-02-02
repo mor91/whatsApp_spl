@@ -9,7 +9,7 @@ package protocol_whatsapp;
  *
  * @author chen
  */
-public class AddUser {
+public class AddUser extends RequestURI{
     private String _tergetGroup;
     private String _userPhoneNumber;
 

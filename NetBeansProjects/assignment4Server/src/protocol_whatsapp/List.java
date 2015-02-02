@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author chen
  */
-public class List {
+public class List extends RequestURI{
     private String _listType;
     private boolean _isValidType=true;
 

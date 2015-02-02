@@ -9,6 +9,7 @@ package protocol_whatsapp;
  *
  * @author chen
  */
-public class Logout extends RequestURI{
+public class RequestURI {
+    protected String _type;
     
 }

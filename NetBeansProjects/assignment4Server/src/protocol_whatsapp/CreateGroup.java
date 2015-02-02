@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author chen
  */
-public class CreateGroup {
+public class CreateGroup extends RequestURI{
     private String _groupName;
     private Map<String, String> _usersMap;
 

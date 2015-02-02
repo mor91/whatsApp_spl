@@ -9,7 +9,7 @@ package protocol_whatsapp;
  *
  * @author chen
  */
-public class Send {
+public class Send extends RequestURI{
     private String _type;
     private String _target;
     private String _content;
