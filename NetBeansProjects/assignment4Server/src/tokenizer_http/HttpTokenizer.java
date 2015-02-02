@@ -7,8 +7,10 @@ package tokenizer_http;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Map;
 
 /**
  *
@@ -21,12 +23,13 @@ public class HttpTokenizer<T> implements tokenizer.Tokenizer{
     
     @Override
     public Object nextMessage() {
+        Map<String,String> massegeMap=new HashMap<>();
         StringBuilder stringBuilder=new StringBuilder();
         int c;
         try {
             while((c=_in.read())!=-1){
                 if(c=='\n'){
-                    
+                    stringBuilder.append("\n");
                 }
                 if(c==_delimiter){
                     break;
@@ -37,7 +40,15 @@ public class HttpTokenizer<T> implements tokenizer.Tokenizer{
             Logger.getLogger(HttpTokenizer.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String massege=stringBuilder.toString();
+        String[] massegeBody=massege.split("\n\n");
+        String[] lines=massegeBody[0].split("\n");
+        massegeMap.put(lines[0].split(" ")[0],lines[0].split(" ")[1]);
+        for(int i=1;i<lines.length;i++){
+            massegeMap.put(lines[i].split(": ")[0], lines[i].split(": ")[1]);
+        }
+        massegeMap.put("massegeBody", massegeBody[1]);
+        return massegeMap;
     }
 
     @Override
