@@ -48,8 +48,8 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
                 send(msg);
                 break;
         }
-        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
+       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -125,14 +125,52 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
     private void removeUser(Object msg){
         if(_users.containsKey(((RemoveUser)msg).getUserPhoneNumber())){
             if(_groups.containsKey(((RemoveUser)msg).getTergetGroup())){
-                
+                if( _groups.get(((RemoveUser)msg).getTergetGroup()).containUser(_users.get(((RemoveUser)msg).getUserPhoneNumber()))){
+                    _groups.get(((RemoveUser)msg).getTergetGroup()).removeMember(_users.get(((RemoveUser)msg).getUserPhoneNumber()));
+                }
+                else{
+                    //error user not in group
+                }
             }
+            else{
+                //error terget not found
+            }
+        }
+        else{
+            //user not found 
         }
     }
     private void massegeQueue(Object msg){
-        
+        if(_users.containsKey(((MassegesQueue)msg).getUserName())){
+            if(!_users.get(((MassegesQueue)msg).getUserName()).getMassegesQueue().isEmpty()){
+                 //_users.get(((MassegesQueue)msg).getUserName()).getMassegesQueue();
+            }
+            else{
+                //no masseges
+            }
+        }
+        else{
+            //error user not found
+        }
     }
     private void send(Object msg){
-        
+        switch(((Send)msg).getMsgType()){
+            case "Group":
+                if(_groups.containsKey(((Send)msg).getTarget())){
+                    //sent content to group
+                }
+                else{
+                    //error target not found 
+                }
+                break;
+            case "Direct":
+                if(_users.containsKey(((Send)msg).getTarget())){
+                        //sent content to user
+                }
+                else{
+                    //error target not found 
+                }
+            default: //invalid type 
+        }
     }
 }

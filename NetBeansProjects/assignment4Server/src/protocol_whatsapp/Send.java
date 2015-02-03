@@ -10,14 +10,28 @@ package protocol_whatsapp;
  * @author chen
  */
 public class Send extends RequestURI{
-    private String _type;
+    private String _msgType;
     private String _target;
     private String _content;
 
-    public Send(String _type, String _target, String _content) {
-        this._type = _type;
+    public Send(String _msgType, String _target, String _content) {
+        this._type = _msgType;
         this._target = _target;
         this._content = _content;
     }
+
+    public String getTarget() {
+        return _target;
+    }
+
+    public String getContent() {
+        return _content;
+    }
+
+    public String getMsgType() {
+        return _msgType;
+    }
+    
+    
     
 }
