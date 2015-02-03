@@ -19,31 +19,27 @@ public class List extends RequestURI{
         this._listType = _listType;
         
         switch(_listType){
-            case "users":
-                createUsersList();
+            case "Users":
                 break;
-            case "group":
-                createGroupList();
+            case "Group":
                 break;
-            case "groups":
-                createGroupsList();
+            case "Groups":
                 break;
             default: inValidType();
                 break;
         }
                 
     }
-    
-    private void createUsersList(){
-        Map<String,String> usersList=new HashMap<>();
-    }
-    private void createGroupList(){
-        
-    }
-    private void createGroupsList(){
-        
-    }
     private void inValidType(){
         _isValidType=false;
     }
+
+    public String getListType() {
+        return _listType;
+    }
+
+    public boolean isIsValidType() {
+        return _isValidType;
+    }
+    
 }

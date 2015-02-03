@@ -13,20 +13,12 @@ import java.util.Queue;
  */
 public class MassegesQueue extends RequestURI{
     private String _userName;
-    private Queue _massegesQueue;
+    
 
-    public MassegesQueue(String _userName, Queue _massegesQueue) {
+    public MassegesQueue(String _userName) {
         this._userName = _userName;
-        this._massegesQueue =new LinkedList();
+        
     }
     
-    public void addMassegeToQueue(String msg){
-        _massegesQueue.add(msg);
-    }
-    public Queue getMassegesQueue(){
-        Queue returnQueue= _massegesQueue;
-        while(!_massegesQueue.isEmpty())
-            _massegesQueue.remove();
-        return returnQueue;
-    }
+
 }

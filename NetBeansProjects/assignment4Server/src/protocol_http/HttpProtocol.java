@@ -25,7 +25,7 @@ public class HttpProtocol<T> implements protocol.ServerProtocol{
     @Override
     public Object processMessage(Object msg) {
         boolean isValidUri=false;
-        RequestURI requestURI;
+        RequestURI requestURI=null;
          if(((Map<String,String>)msg).containsKey("POST")){
              if(((Map<String,String>)msg).get("POST").compareTo("login.jsp")==0){
                  isValidUri=true;
@@ -48,23 +48,34 @@ public class HttpProtocol<T> implements protocol.ServerProtocol{
              }
              if(((Map<String,String>)msg).get("POST").compareTo("send.jsp")==0){
                  isValidUri=true;
-                 
-                 requestURI=new Send(null, null, null);
+                 String type=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
+                 String target=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
+                 String content=((Map<String,String>)msg).get("massegeBody").split("&")[2].split("=")[1];
+                 requestURI=new Send(type, target, content);
              }
              if(((Map<String,String>)msg).get("POST").compareTo("add_user.jsp")==0){
                  isValidUri=true;
+                 String targrt=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
+                 String userPhone=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
+                 requestURI=new AddUser(targrt, userPhone);
              }
              if(((Map<String,String>)msg).get("POST").compareTo("remove_user.jsp")==0){
                  isValidUri=true;
+                  String targrt=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
+                 String userPhone=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
+                 requestURI=new RemoveUser(targrt, userPhone);
              }
             
         }
         if(((Map<String,String>)msg).containsKey("GET")){
             if(((Map<String,String>)msg).get("GET").compareTo("logout.jsp")==0){
                  isValidUri=true;
+                 
+                 //requestURI=new Logout(null);
              }
             if(((Map<String,String>)msg).get("GET").compareTo("queue.jsp")==0){
                  isValidUri=true;
+                 //requestURI=new MassegesQueue(null);
              }
         }
         if(!isValidUri){
@@ -74,7 +85,7 @@ public class HttpProtocol<T> implements protocol.ServerProtocol{
             //check 
         }
        
-        return msg;
+        return requestURI;
     }
 
     @Override

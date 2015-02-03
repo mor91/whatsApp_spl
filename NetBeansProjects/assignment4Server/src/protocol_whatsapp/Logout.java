@@ -10,5 +10,15 @@ package protocol_whatsapp;
  * @author chen
  */
 public class Logout extends RequestURI{
+    private String _userName;
+
+    public Logout(String _userName) {
+        this._userName = _userName;
+    }
+
+    public String getUserName() {
+        return _userName;
+    }
+    
     
 }

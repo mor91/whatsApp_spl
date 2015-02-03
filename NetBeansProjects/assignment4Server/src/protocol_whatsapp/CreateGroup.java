@@ -6,6 +6,7 @@
 package protocol_whatsapp;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 /**
  *
@@ -13,15 +14,24 @@ import java.util.Map;
  */
 public class CreateGroup extends RequestURI{
     private String _groupName;
-    private Map<String, String> _usersMap;
+    private Vector<String> _usersVector;
 
-    public CreateGroup(String _groupName, Map<String, String> _usersMap) {
+    public CreateGroup(String _groupName) {
         this._groupName = _groupName;
-        this._usersMap = new HashMap<>();
+        this._usersVector=new Vector<>();
     }
     
-    public void addUserToGroup(String userName, String phoneNumber){
-        _usersMap.put(userName, phoneNumber);
+    public void addUserToGroup(String userName){
+        _usersVector.add(userName);
     }
+
+    public String getGroupName() {
+        return _groupName;
+    }
+
+    public Vector<String> getUsersVector() {
+        return _usersVector;
+    }
+    
     
 }

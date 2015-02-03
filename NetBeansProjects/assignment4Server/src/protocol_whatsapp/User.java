@@ -5,19 +5,22 @@
  */
 package protocol_whatsapp;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  *
  * @author chen
  */
-public class Login extends RequestURI{
+public class User {
     private String _userName;
     private String _phoneNumber;
+    private Queue _massegesQueue;
 
-
-    public Login(String _userName, String _phoneNumber) {
+    public User(String _userName, String _phoneNumber) {
         this._userName = _userName;
         this._phoneNumber = _phoneNumber;
-
+        this._massegesQueue =new LinkedList();
     }
 
     public String getUserName() {
@@ -27,5 +30,13 @@ public class Login extends RequestURI{
     public String getPhoneNumber() {
         return _phoneNumber;
     }
-    
+        public void addMassegeToQueue(String msg){
+        _massegesQueue.add(msg);
+    }
+    public Queue getMassegesQueue(){
+        Queue returnQueue= _massegesQueue;
+        while(!_massegesQueue.isEmpty())
+            _massegesQueue.remove();
+        return returnQueue;
+    }
 }

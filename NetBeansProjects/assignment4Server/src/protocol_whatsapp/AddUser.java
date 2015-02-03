@@ -17,5 +17,13 @@ public class AddUser extends RequestURI{
         this._tergetGroup = _tergetGroup;
         this._userPhoneNumber = _userPhoneNumber;
     }
+
+    public String getTergetGroup() {
+        return _tergetGroup;
+    }
+
+    public String getUserPhoneNumber() {
+        return _userPhoneNumber;
+    }
     
 }
