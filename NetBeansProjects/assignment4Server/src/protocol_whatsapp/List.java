@@ -6,6 +6,7 @@
 package protocol_whatsapp;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 /**
  *
@@ -14,8 +15,10 @@ import java.util.Map;
 public class List extends RequestURI{
     private String _listType;
     private boolean _isValidType=true;
+    private Vector<String>  _responseMassegeBody;
 
     public List(String _listType) {
+        this._responseMassegeBody=new Vector<>();
         this._listType = _listType;
         
         switch(_listType){
@@ -42,5 +45,13 @@ public class List extends RequestURI{
     public boolean isIsValidType() {
         return _isValidType;
     }
-    
+    public void massegeSuccessUsers(Map<String, User> users){
+        
+    }
+    public void massegeSuccessUGroup(Group group){
+        
+    }
+    public void massegeSuccessGroups(Map<String,Group> groups){
+        
+    }
 }

@@ -57,6 +57,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     private void addUSer(Object msg){
+        boolean isOk=true;
         if(((AddUser)msg).getUserPhoneNumber()!=""&&((AddUser)msg).getTergetGroup()!=""){
             if(_users.containsKey(((AddUser)msg).getUserPhoneNumber())){
                 if(_groups.containsKey(((AddUser)msg).getTergetGroup())){
@@ -65,45 +66,59 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
                     }
                     else{
                         ((AddUser)msg).responseExistInGroup();
+                        isOk=false;
                     }
                 }
                 else{
                     ((AddUser)msg).responseTargetNoFound();
+                    isOk=false;
                 }
             }
             else{
                ((AddUser)msg).responseUserNotound();
+               isOk=false;
             }
         }
         else{
             ((AddUser)msg).responseParameters();
+            isOk=false;
         }
+        if(isOk)
+            ((AddUser)msg).massegeSuccess();
     }
     private void login(Object msg){
-        if(!_users.containsKey(((Login)msg).getPhoneNumber())){
-            User user=new User(((Login)msg).getUserName(), ((Login)msg).getPhoneNumber());
-            _users.put(((Login)msg).getPhoneNumber(),user);
+        boolean isOk=true;
+        if(((Login)msg).getPhoneNumber()!=""&&((Login)msg).getUserName()!="")
+        {
+            if(!_users.containsKey(((Login)msg).getPhoneNumber())){
+                User user=new User(((Login)msg).getUserName(), ((Login)msg).getPhoneNumber());
+                _users.put(((Login)msg).getPhoneNumber(),user);
+            }
+            else {
+                ((Login)msg).responseUserExist();
+                isOk=false;
+            }
         }
-        else {
-            //error user exists
+        else{
+            ((Login)msg).responseParameters();
+            isOk=false;
         }
+            if(isOk)
+                ((Login)msg).massegeSuccess();   
     }
     private void logout(Object msg){
-        if(_users.containsKey(((Logout)msg).getUserName())){
-            _users.remove(((Logout)msg).getUserName());
-        }
-        else {
-            //error user not found
-        }
+        _users.remove(((Logout)msg).getUserName());
+        ((Logout)msg).massegeSuccess();  
     }
     private void createGroup(Object msg){
+        boolean isOk=true;
         if(!_groups.containsKey(((CreateGroup)msg).getGroupName())){
             Group group=new Group(((CreateGroup)msg).getGroupName());
             _groups.put(((CreateGroup)msg).getGroupName(), group);
         }
         else{
-            //error group name exists
-            
+            ((CreateGroup)msg).responseNameTaken();
+            isOk=false;
         }
         for (String user : ((CreateGroup)msg).getUsersVector()) {
             if(_users.containsKey(user))
@@ -111,9 +126,12 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
                 _groups.get(((CreateGroup)msg).getGroupName()).addMember(_users.get(user));
             }
             else{
-                //error user not found 
+                ((CreateGroup)msg).responseUnknownUser(user);
+                isOk=false;
             }
         }
+        if(isOk)
+            ((CreateGroup)msg).massegeSuccess();
     }
     private void list(Object msg){
         switch(((List)msg).getListType()){
@@ -126,35 +144,36 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
         }
     }
     private void removeUser(Object msg){
-        if(_users.containsKey(((RemoveUser)msg).getUserPhoneNumber())){
+        boolean isOk=true;
+        if(((RemoveUser)msg).getTergetGroup()!=""&&((RemoveUser)msg).getUserPhoneNumber()!=""){
             if(_groups.containsKey(((RemoveUser)msg).getTergetGroup())){
                 if( _groups.get(((RemoveUser)msg).getTergetGroup()).containUser(_users.get(((RemoveUser)msg).getUserPhoneNumber()))){
                     _groups.get(((RemoveUser)msg).getTergetGroup()).removeMember(_users.get(((RemoveUser)msg).getUserPhoneNumber()));
                 }
                 else{
-                    //error user not in group
+                    ((RemoveUser)msg).responseUserNotInGroup();
+                    isOk=false;
                 }
             }
             else{
-                //error terget not found
+                ((RemoveUser)msg).responseTarget();
+                isOk=false;
             }
         }
         else{
-            //user not found 
+            ((RemoveUser)msg).responseParameters();
+            isOk=false;
         }
+        if(isOk)
+            ((RemoveUser)msg).massegeSuccess();
     }
     private void massegeQueue(Object msg){
-        if(_users.containsKey(((MassegesQueue)msg).getUserName())){
-            if(!_users.get(((MassegesQueue)msg).getUserName()).getMassegesQueue().isEmpty()){
-                 //_users.get(((MassegesQueue)msg).getUserName()).getMassegesQueue();
-            }
-            else{
-                //no masseges
-            }
+        if(!_users.get(((MassegesQueue)msg).getUserName()).getMassegesQueue().isEmpty()){
+            ((MassegesQueue)msg).massegeSuccess(_users.get(((MassegesQueue)msg).getUserName()));
         }
         else{
-            //error user not found
-        }
+            ((MassegesQueue)msg).massegeNoMasseges();
+        } 
     }
     private void send(Object msg){
         switch(((Send)msg).getMsgType()){

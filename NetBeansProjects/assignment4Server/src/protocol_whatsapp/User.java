@@ -18,7 +18,7 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 public class User {
     private String _userName;
     private String _phoneNumber;
-    private Queue _massegesQueue;
+    private Queue<WhatsAppMassege> _massegesQueue;
     private Cookie _cookie;
 
     public User(String _userName, String _phoneNumber) {
@@ -35,13 +35,10 @@ public class User {
     public String getPhoneNumber() {
         return _phoneNumber;
     }
-        public void addMassegeToQueue(String msg){
+        public void addMassegeToQueue(WhatsAppMassege msg){
         _massegesQueue.add(msg);
     }
-    public Queue getMassegesQueue(){
-        Queue returnQueue= _massegesQueue;
-        while(!_massegesQueue.isEmpty())
-            _massegesQueue.remove();
-        return returnQueue;
+    public Queue<WhatsAppMassege> getMassegesQueue(){
+        return _massegesQueue;
     }
 }
