@@ -5,6 +5,8 @@
  */
 package protocol_whatsapp;
 
+import java.util.Vector;
+
 /**
  *
  * @author chen
@@ -12,10 +14,13 @@ package protocol_whatsapp;
 public class AddUser extends RequestURI{
     private String _tergetGroup;
     private String _userPhoneNumber;
+    private Vector<String> _responseMassegeBody;
 
     public AddUser(String _tergetGroup, String _userPhoneNumber) {
         this._tergetGroup = _tergetGroup;
         this._userPhoneNumber = _userPhoneNumber;
+        this._responseMassegeBody=new Vector<>();
+        this._type="AddUser";
     }
 
     public String getTergetGroup() {
@@ -24,6 +29,24 @@ public class AddUser extends RequestURI{
 
     public String getUserPhoneNumber() {
         return _userPhoneNumber;
+    }
+    public void responsePermission(){
+        this._responseMassegeBody.add("ERROR 669: Permission denied");
+    }
+    public void responseParameters(){
+        this._responseMassegeBody.add("ERROR 242: Cannot add user, missing parameters");
+    }
+    public void responseExistInGroup(){
+        this._responseMassegeBody.add("ERROR 142: Cannot add user, user already in group");
+    }
+    public void responseTargetNoFound(){
+        this._responseMassegeBody.add("ERROR 770: Target does not Exist");
+    }
+    public void massegeSuccess(){
+        this._responseMassegeBody.add(_userPhoneNumber+" added to "+_tergetGroup);
+    }
+    public void responseUserNotound(){
+        this._responseMassegeBody.add("ERROR 999: User not found");
     }
     
 }

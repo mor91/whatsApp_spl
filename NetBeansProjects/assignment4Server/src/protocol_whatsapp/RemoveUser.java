@@ -16,6 +16,16 @@ public class RemoveUser extends RequestURI{
     public RemoveUser(String _tergetGroup, String _userPhoneNumber) {
         this._tergetGroup = _tergetGroup;
         this._userPhoneNumber = _userPhoneNumber;
+        this._type="RemoveUser";
     }
+
+    public String getTergetGroup() {
+        return _tergetGroup;
+    }
+
+    public String getUserPhoneNumber() {
+        return _userPhoneNumber;
+    }
+    
     
 }

@@ -11,7 +11,10 @@ package protocol_whatsapp;
  */
 public class RequestURI {
     protected String _type;
-    public String getType(){
+    public String getUriType(){
         return _type;
+    }
+    public void response(){
+        
     }
 }

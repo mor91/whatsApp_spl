@@ -17,6 +17,7 @@ public class MassegesQueue extends RequestURI{
 
     public MassegesQueue(String _userName) {
         this._userName = _userName;
+        this._type="MassegesQueue";
         
     }
 

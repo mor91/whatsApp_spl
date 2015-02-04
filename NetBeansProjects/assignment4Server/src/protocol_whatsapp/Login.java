@@ -17,6 +17,7 @@ public class Login extends RequestURI{
     public Login(String _userName, String _phoneNumber) {
         this._userName = _userName;
         this._phoneNumber = _phoneNumber;
+        this._type="Login";
 
     }
 

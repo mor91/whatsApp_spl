@@ -22,7 +22,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
     
     @Override
     public Object processMessage(Object msg) {
-        switch(((RequestURI)msg).getType()){
+        switch(((RequestURI)msg).getUriType()){
             case "AddUser":
                 addUSer(msg);
                 break;
@@ -48,7 +48,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
                 send(msg);
                 break;
         }
-        return null;
+        return msg;
        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -57,23 +57,27 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     private void addUSer(Object msg){
+        if(((AddUser)msg).getUserPhoneNumber()!=""&&((AddUser)msg).getTergetGroup()!=""){
             if(_users.containsKey(((AddUser)msg).getUserPhoneNumber())){
                 if(_groups.containsKey(((AddUser)msg).getTergetGroup())){
                     if(!_groups.get(((AddUser)msg).getTergetGroup()).containUser(_users.get(((AddUser)msg).getUserPhoneNumber()))){
                         _groups.get(((AddUser)msg).getTergetGroup()).addMember(_users.get(((AddUser)msg).getUserPhoneNumber()));
                     }
                     else{
-                        //error 142 cannot add user, user all ready in group
+                        ((AddUser)msg).responseExistInGroup();
                     }
                 }
                 else{
-                    //error 770 target not exist
+                    ((AddUser)msg).responseTargetNoFound();
                 }
             }
             else{
-                //error *** user not found
+               ((AddUser)msg).responseUserNotound();
             }
-            
+        }
+        else{
+            ((AddUser)msg).responseParameters();
+        }
     }
     private void login(Object msg){
         if(!_users.containsKey(((Login)msg).getPhoneNumber())){
@@ -83,7 +87,6 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
         else {
             //error user exists
         }
-        //cookie
     }
     private void logout(Object msg){
         if(_users.containsKey(((Logout)msg).getUserName())){

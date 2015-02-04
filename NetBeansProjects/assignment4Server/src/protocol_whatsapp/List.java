@@ -28,6 +28,7 @@ public class List extends RequestURI{
             default: inValidType();
                 break;
         }
+        this._type="List";
                 
     }
     private void inValidType(){

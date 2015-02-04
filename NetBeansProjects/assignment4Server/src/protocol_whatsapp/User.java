@@ -7,6 +7,9 @@ package protocol_whatsapp;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.cookie.BasicClientCookie;
+
 
 /**
  *
@@ -16,11 +19,13 @@ public class User {
     private String _userName;
     private String _phoneNumber;
     private Queue _massegesQueue;
+    private Cookie _cookie;
 
     public User(String _userName, String _phoneNumber) {
         this._userName = _userName;
         this._phoneNumber = _phoneNumber;
         this._massegesQueue =new LinkedList();
+        this._cookie=new BasicClientCookie((_userName+"Cookie"), _userName);
     }
 
     public String getUserName() {

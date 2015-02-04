@@ -18,6 +18,7 @@ public class Send extends RequestURI{
         this._type = _msgType;
         this._target = _target;
         this._content = _content;
+        this._type="Send";
     }
 
     public String getTarget() {

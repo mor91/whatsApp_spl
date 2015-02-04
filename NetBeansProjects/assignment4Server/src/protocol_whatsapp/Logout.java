@@ -14,6 +14,7 @@ public class Logout extends RequestURI{
 
     public Logout(String _userName) {
         this._userName = _userName;
+        this._type="Logout";
     }
 
     public String getUserName() {
