@@ -27,6 +27,7 @@ public class Logout extends RequestURI{
     }
     public void massegeSuccess(){
         this._responseMassegeBody.add("Googbye");
+        this.setCode("200");
     }
     
 }

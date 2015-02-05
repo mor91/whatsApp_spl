@@ -34,11 +34,14 @@ public class Login extends RequestURI{
     }
     public void responseParameters(){
         this._responseMassegeBody.add("ERROR 765: Cannot login, missing parameters");
+        this.setCode("405");
     }
     public void responseUserExist(){
         this._responseMassegeBody.add("ERROR 888: Cannot login, user already exist");
+        this.setCode("405");
     }
     public void massegeSuccess(){
         this._responseMassegeBody.add("Welcome "+_userName+_phoneNumber);
+        this.setCode("200");
     }
 }

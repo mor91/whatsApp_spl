@@ -33,9 +33,11 @@ public class MassegesQueue extends RequestURI{
             WhatsAppMassege whatsAppMassege=user.getMassegesQueue().poll();
             this._responseMassegeBody.add("from: "+whatsAppMassege.getFrom()+"Msg: "+whatsAppMassege.getMsg());
         }
+        this.setCode("200");
     }
     public void massegeNoMasseges(){
         this._responseMassegeBody.add("No new masseges");
+        this.setCode("200");
     }
 
 }

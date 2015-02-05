@@ -38,6 +38,11 @@ public class User {
         public void addMassegeToQueue(WhatsAppMassege msg){
         _massegesQueue.add(msg);
     }
+
+    public Cookie getCookie() {
+        return _cookie;
+    }
+        
     public Queue<WhatsAppMassege> getMassegesQueue(){
         return _massegesQueue;
     }

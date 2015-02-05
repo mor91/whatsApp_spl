@@ -62,11 +62,13 @@ public class List extends RequestURI{
            str+=user.getPhoneNumber()+",";
         }
         _responseMassegeBody.add(str.substring(0, str.length()-2));
+        this.setCode("200");
     }
     public void massegeSuccessUsers(Map<String, User> users){
         for (Map.Entry<String, User> user: users.entrySet()) {
             _responseMassegeBody.add(user.getValue().getUserName()+"@"+user.getValue().getPhoneNumber());
         }
+        this.setCode("200");
     }
     public void massegeSuccessGroups(Map<String,Group> groups){
         for (Map.Entry<String, Group> group : groups.entrySet()) {
@@ -76,8 +78,10 @@ public class List extends RequestURI{
             }
             _responseMassegeBody.add(str.substring(0, str.length()-2));
         }
+        this.setCode("200");
     }
     public void responseParameters(){
         this._responseMassegeBody.add("ERROR 273: mossing parameters");
+        this.setCode("405");
     }
 }

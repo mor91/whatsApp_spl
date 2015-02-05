@@ -35,18 +35,23 @@ public class AddUser extends RequestURI{
     }
     public void responseParameters(){
         this._responseMassegeBody.add("ERROR 242: Cannot add user, missing parameters");
+        this.setCode("405");
     }
     public void responseExistInGroup(){
         this._responseMassegeBody.add("ERROR 142: Cannot add user, user already in group");
+        this.setCode("405");
     }
     public void responseTargetNoFound(){
         this._responseMassegeBody.add("ERROR 770: Target does not Exist");
+        this.setCode("405");
     }
     public void massegeSuccess(){
         this._responseMassegeBody.add(_userPhoneNumber+" added to "+_tergetGroup);
+        this.setCode("200");
     }
     public void responseUserNotound(){
         this._responseMassegeBody.add("ERROR 999: User not found");
+        this.setCode("405");
     }
     
 }

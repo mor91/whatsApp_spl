@@ -38,12 +38,15 @@ public class Send extends RequestURI{
     }
     public void responseTarget(){
         _responseMassegeBody.add("ERROR 771: Target does not exist");
+        this.setCode("405");
     }
     public void responseType(){
         _responseMassegeBody.add("ERROR 836: invalid type");
+        this.setCode("405");
     }
     public void responseParameters(){
         _responseMassegeBody.add("ERROR 711: Cannot send, missing parameters");
+        this.setCode("405");
     }
     
     

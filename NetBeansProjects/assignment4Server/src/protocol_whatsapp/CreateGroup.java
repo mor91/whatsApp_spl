@@ -37,15 +37,19 @@ public class CreateGroup extends RequestURI{
     }
     public void responseParametes(){
         this._responseMassegeBody.add("ERROR 675: Cannot create group, missing parameters");
+        this.setCode("405");
     }
     public void responseUnknownUser(String user){
         this._responseMassegeBody.add("ERROR 929: unknowen user "+user);
+        this.setCode("405");
     }
     public void responseNameTaken(){
         this._responseMassegeBody.add("ERROR 511: Group Name Already Taken");
+        this.setCode("405");
     }
     public void massegeSuccess(){
         this._responseMassegeBody.add("Group "+_groupName+" Created");
+        this.setCode("200");
     }
     
 }

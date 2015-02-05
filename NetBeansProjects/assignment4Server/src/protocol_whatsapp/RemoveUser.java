@@ -32,14 +32,18 @@ public class RemoveUser extends RequestURI{
     }
     public void massegeSuccess(){
         this._responseMassegeBody.add(_userPhoneNumber +" removed from "+_tergetGroup);
+        this.setCode("200");
     }
     public void responseParameters(){
         this._responseMassegeBody.add("ERROR 336: Cannot remove, missing parameters");
+        this.setCode("405");
     }
     public void responseTarget(){
         this._responseMassegeBody.add("ERROR 769: Target does nor exist");
+        this.setCode("405");
     }
     public void responseUserNotInGroup(){
         this._responseMassegeBody.add("ERROR 777: user not in group");
+        this.setCode("405");
     }
 }
