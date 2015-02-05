@@ -15,7 +15,7 @@ public class Login extends RequestURI{
     private String _userName;
     private String _phoneNumber;
     private Vector<String> _responseMassegeBody;
-
+    private String _cookie;
 
     public Login(String _userName, String _phoneNumber) {
         this._userName = _userName;
@@ -44,4 +44,8 @@ public class Login extends RequestURI{
         this._responseMassegeBody.add("Welcome "+_userName+_phoneNumber);
         this.setCode("200");
     }
+    public void setCookie(String _cookie) {
+        this._cookie = _cookie;
+    }
+
 }

@@ -98,7 +98,9 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
             if(!_users.containsKey(((Login)msg).getPhoneNumber())){
                 User user=new User(((Login)msg).getUserName(), ((Login)msg).getPhoneNumber());
                 _users.put(((Login)msg).getPhoneNumber(),user);
-                ((RemoveUser)msg).massegeSuccess();
+                ((Login)msg).massegeSuccess();
+                ((Login)msg).setCookie(user.getCookie().getValue());
+                
             }
             else {
                 ((Login)msg).responseUserExist();
@@ -195,7 +197,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
             switch(((Send)msg).getMsgType()){
                 case "Group":
                     if(_groups.containsKey(((Send)msg).getTarget())){
-                        //sent content to group
+                        //send content to group
                     }
                     else{
                         ((Send)msg).responseTarget();
@@ -203,7 +205,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
                     break;
                 case "Direct":
                     if(_users.containsKey(((Send)msg).getTarget())){
-                            //sent content to user
+                            //send content to user
                     }
                     else{
                         ((Send)msg).responseTarget();

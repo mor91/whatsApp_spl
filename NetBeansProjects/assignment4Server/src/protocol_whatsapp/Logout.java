@@ -5,7 +5,6 @@
  */
 package protocol_whatsapp;
 
-import java.util.Stack;
 import java.util.Vector;
 
 /**
