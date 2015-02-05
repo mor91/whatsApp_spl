@@ -24,6 +24,15 @@ public class Group {
     public void addMember(User phoneNumber){
         _users.add(phoneNumber);
     }
+
+    public String getGroupName() {
+        return _groupName;
+    }
+
+    public Vector<User> getUsers() {
+        return _users;
+    }
+    
     public void removeMember(User phoneNumber){
         _users.remove(phoneNumber);
     }

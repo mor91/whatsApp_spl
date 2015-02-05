@@ -47,6 +47,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
             case "Send":
                 send(msg);
                 break;
+            default: 
         }
         return msg;
        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -87,29 +88,27 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
             ((AddUser)msg).massegeSuccess();
     }
     private void login(Object msg){
-        boolean isOk=true;
         if(((Login)msg).getPhoneNumber()!=""&&((Login)msg).getUserName()!="")
         {
             if(!_users.containsKey(((Login)msg).getPhoneNumber())){
                 User user=new User(((Login)msg).getUserName(), ((Login)msg).getPhoneNumber());
                 _users.put(((Login)msg).getPhoneNumber(),user);
+                ((RemoveUser)msg).massegeSuccess();
             }
             else {
                 ((Login)msg).responseUserExist();
-                isOk=false;
             }
         }
         else{
             ((Login)msg).responseParameters();
-            isOk=false;
-        }
-            if(isOk)
-                ((Login)msg).massegeSuccess();   
+        } 
     }
+    
     private void logout(Object msg){
         _users.remove(((Logout)msg).getUserName());
         ((Logout)msg).massegeSuccess();  
     }
+    
     private void createGroup(Object msg){
         boolean isOk=true;
         if(!_groups.containsKey(((CreateGroup)msg).getGroupName())){
@@ -133,40 +132,43 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
         if(isOk)
             ((CreateGroup)msg).massegeSuccess();
     }
+    
     private void list(Object msg){
-        switch(((List)msg).getListType()){
-            case "Users": //return users
-                break;
-            case "Group": //return group
-                break;
-            case "Groups": //return groups
-                break; 
+        if(((List)msg).getListType()!=""){
+            switch(((List)msg).getListType()){
+                case "Users": ((List)msg).massegeSuccessUsers(_users);
+                    break;
+                case "Groups": ((List)msg).massegeSuccessGroups(_groups);
+                    break; 
+                case "Group": ((List)msg).massegeSuccessGroup(_groups.get(((List)msg).getGroupName()));
+                    break;
+            }
+        }
+        else{
+            ((List)msg).responseParameters();
         }
     }
+    
     private void removeUser(Object msg){
-        boolean isOk=true;
         if(((RemoveUser)msg).getTergetGroup()!=""&&((RemoveUser)msg).getUserPhoneNumber()!=""){
             if(_groups.containsKey(((RemoveUser)msg).getTergetGroup())){
                 if( _groups.get(((RemoveUser)msg).getTergetGroup()).containUser(_users.get(((RemoveUser)msg).getUserPhoneNumber()))){
                     _groups.get(((RemoveUser)msg).getTergetGroup()).removeMember(_users.get(((RemoveUser)msg).getUserPhoneNumber()));
+                    ((RemoveUser)msg).massegeSuccess();
                 }
                 else{
                     ((RemoveUser)msg).responseUserNotInGroup();
-                    isOk=false;
                 }
             }
             else{
                 ((RemoveUser)msg).responseTarget();
-                isOk=false;
             }
         }
         else{
             ((RemoveUser)msg).responseParameters();
-            isOk=false;
         }
-        if(isOk)
-            ((RemoveUser)msg).massegeSuccess();
     }
+    
     private void massegeQueue(Object msg){
         if(!_users.get(((MassegesQueue)msg).getUserName()).getMassegesQueue().isEmpty()){
             ((MassegesQueue)msg).massegeSuccess(_users.get(((MassegesQueue)msg).getUserName()));
@@ -175,24 +177,30 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
             ((MassegesQueue)msg).massegeNoMasseges();
         } 
     }
+    
     private void send(Object msg){
-        switch(((Send)msg).getMsgType()){
-            case "Group":
-                if(_groups.containsKey(((Send)msg).getTarget())){
-                    //sent content to group
-                }
-                else{
-                    //error target not found 
-                }
-                break;
-            case "Direct":
-                if(_users.containsKey(((Send)msg).getTarget())){
-                        //sent content to user
-                }
-                else{
-                    //error target not found 
-                }
-            default: //invalid type 
+        if(((Send)msg).getContent()!=""&&((Send)msg).getMsgType()!=""&&((Send)msg).getTarget()!=""){
+            switch(((Send)msg).getMsgType()){
+                case "Group":
+                    if(_groups.containsKey(((Send)msg).getTarget())){
+                        //sent content to group
+                    }
+                    else{
+                        ((Send)msg).responseTarget();
+                    }
+                    break;
+                case "Direct":
+                    if(_users.containsKey(((Send)msg).getTarget())){
+                            //sent content to user
+                    }
+                    else{
+                        ((Send)msg).responseTarget();
+                    }
+                default: ((Send)msg).responseType();
+            }
+        }
+        else{
+            ((Send)msg).responseParameters();
         }
     }
 }

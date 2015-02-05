@@ -16,10 +16,12 @@ public class List extends RequestURI{
     private String _listType;
     private boolean _isValidType=true;
     private Vector<String>  _responseMassegeBody;
+    private String groupName;
 
-    public List(String _listType) {
+    public List(String _listType, String groupName) {
         this._responseMassegeBody=new Vector<>();
         this._listType = _listType;
+        this.groupName=groupName;
         
         switch(_listType){
             case "Users":
@@ -45,13 +47,37 @@ public class List extends RequestURI{
     public boolean isIsValidType() {
         return _isValidType;
     }
-    public void massegeSuccessUsers(Map<String, User> users){
-        
+
+    public Vector<String> getResponseMassegeBody() {
+        return _responseMassegeBody;
     }
-    public void massegeSuccessUGroup(Group group){
-        
+
+    public String getGroupName() {
+        return groupName;
+    }
+    
+    public void massegeSuccessGroup(Group group){
+        String str="";
+        for (User user : group.getUsers()) {
+           str+=user.getPhoneNumber()+",";
+        }
+        _responseMassegeBody.add(str.substring(0, str.length()-2));
+    }
+    public void massegeSuccessUsers(Map<String, User> users){
+        for (Map.Entry<String, User> user: users.entrySet()) {
+            _responseMassegeBody.add(user.getValue().getUserName()+"@"+user.getValue().getPhoneNumber());
+        }
     }
     public void massegeSuccessGroups(Map<String,Group> groups){
-        
+        for (Map.Entry<String, Group> group : groups.entrySet()) {
+            String str=group.getValue().getGroupName()+":";
+            for (User user : group.getValue().getUsers()) {
+                str+=user.getPhoneNumber()+",";
+            }
+            _responseMassegeBody.add(str.substring(0, str.length()-2));
+        }
+    }
+    public void responseParameters(){
+        this._responseMassegeBody.add("ERROR 273: mossing parameters");
     }
 }

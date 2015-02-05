@@ -24,67 +24,58 @@ public class HttpProtocol<T> implements protocol.ServerProtocol{
 
     @Override
     public Object processMessage(Object msg) {
-        boolean isValidUri=false;
         RequestURI requestURI=null;
-         if(((Map<String,String>)msg).containsKey("POST")){
-             if(((Map<String,String>)msg).get("POST").compareTo("login.jsp")==0){
-                 isValidUri=true;
-                 String userName=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
-                 String phoneNumber=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
-                 requestURI=new Login(userName, phoneNumber);
-             }
-             if(((Map<String,String>)msg).get("POST").compareTo("list.jsp")==0){
-                 isValidUri=true;
-                 requestURI=new List(((Map<String,String>)msg).get("massegeBody").split("=")[1]);
-             }
-             if(((Map<String,String>)msg).get("POST").compareTo("create_group.jsp")==0){
-                 isValidUri=true;
-                 String groupName=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
-                 String[] users=((Map<String,String>)msg).get("massegeBody").split("&");
-                 requestURI=new CreateGroup(groupName);
-                 for(int i=1;i<users.length;i++){
-                    ((CreateGroup)requestURI).addUserToGroup(users[i].split("=")[1]);
-                 }
-             }
-             if(((Map<String,String>)msg).get("POST").compareTo("send.jsp")==0){
-                 isValidUri=true;
-                 String type=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
-                 String target=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
-                 String content=((Map<String,String>)msg).get("massegeBody").split("&")[2].split("=")[1];
-                 requestURI=new Send(type, target, content);
-             }
-             if(((Map<String,String>)msg).get("POST").compareTo("add_user.jsp")==0){
-                 isValidUri=true;
-                 String targrt=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
-                 String userPhone=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
-                 requestURI=new AddUser(targrt, userPhone);
-             }
-             if(((Map<String,String>)msg).get("POST").compareTo("remove_user.jsp")==0){
-                 isValidUri=true;
-                  String targrt=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
-                 String userPhone=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
-                 requestURI=new RemoveUser(targrt, userPhone);
-             }
-            
+        if(((Map<String,String>)msg).containsKey("POST")||((Map<String,String>)msg).containsKey("GET")){
+            switch(((Map<String,String>)msg).get("POST")){
+                case "login.jsp":
+                    String userName=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
+                    String phoneNumber=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
+                    requestURI=new Login(userName, phoneNumber);
+                    break;
+                case "list.jsp":
+                    requestURI=new List(((Map<String,String>)msg).get("massegeBody").split("\n")[0].split("=")[1],((Map<String,String>)msg).get("massegeBody").split("\n")[1].split("=")[1]);
+                    ((List)requestURI).setRequestingCookie(((Map<String,String>)msg).get("Cookie"));
+                    break;
+                case "create_group.jsp":
+                    String groupName=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
+                    String[] users=((Map<String,String>)msg).get("massegeBody").split("&");
+                    requestURI=new CreateGroup(groupName);
+                    for(int i=1;i<users.length;i++){
+                       ((CreateGroup)requestURI).addUserToGroup(users[i].split("=")[1]);
+                    }
+                    ((CreateGroup)requestURI).setRequestingCookie(((Map<String,String>)msg).get("Cookie"));
+                    break;
+                case "send.jsp":
+                    String type=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
+                    String target=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
+                    String content=((Map<String,String>)msg).get("massegeBody").split("&")[2].split("=")[1];
+                    requestURI=new Send(type, target, content);
+                    ((Send)requestURI).setRequestingCookie(((Map<String,String>)msg).get("Cookie"));
+                    break;
+                     
+                case "add_user.jsp":
+
+                    String targrt=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
+                    String userPhone=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
+                    requestURI=new AddUser(targrt, userPhone);
+                    ((AddUser)requestURI).setRequestingCookie(((Map<String,String>)msg).get("Cookie"));
+                break;
+                     
+                case "remove_user.jsp":
+                    String targrt1=((Map<String,String>)msg).get("massegeBody").split("&")[0].split("=")[1];
+                    String userPhone1=((Map<String,String>)msg).get("massegeBody").split("&")[1].split("=")[1];
+                    requestURI=new RemoveUser(targrt1, userPhone1);
+                    ((RequestURI)msg).setRequestingCookie(((Map<String,String>)msg).get("Cookie"));
+                default:
+                    switch(((Map<String,String>)msg).get("GET")){
+                            case "logout.jsp": ((Logout)requestURI).setRequestingCookie(((Map<String,String>)msg).get("Cookie"));
+                                break;
+                            case "queue.jsp": ((MassegesQueue)requestURI).setRequestingCookie(((Map<String,String>)msg).get("Cookie"));
+                            default: requestURI.setCode("404");
+                                break;
+                    }
+            }
         }
-        if(((Map<String,String>)msg).containsKey("GET")){
-            if(((Map<String,String>)msg).get("GET").compareTo("logout.jsp")==0){
-                 isValidUri=true;
-                 
-                 //requestURI=new Logout(null);
-             }
-            if(((Map<String,String>)msg).get("GET").compareTo("queue.jsp")==0){
-                 isValidUri=true;
-                 //requestURI=new MassegesQueue(null);
-             }
-        }
-        if(!isValidUri){
-            //response code 404
-        }
-        else{
-            //check 
-        }
-       
         return requestURI;
     }
 
