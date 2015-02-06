@@ -60,7 +60,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
     public boolean isEnd(Object msg) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    private Object addUSer(Object msg){
+    private void addUSer(Object msg){
         if(((AddUser)msg).getUserPhoneNumber()!=""&&((AddUser)msg).getTergetGroup()!=""){//parameters
             if(_users.containsKey(((AddUser)msg).getUserPhoneNumber())){//user exist
                 if(_groups.containsKey(((AddUser)msg).getTergetGroup())){//terget exist
@@ -69,7 +69,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
                             if(user.getCookie().getValue().compareTo(((AddUser)msg).getRequestingCookie())!=0){
                                 ((AddUser)msg).responsePermission();
                                 ((AddUser)msg).setCode("403");
-                                return msg;
+                                break;
                             }
                         }
                         _groups.get(((AddUser)msg).getTergetGroup()).addMember(_users.get(((AddUser)msg).getUserPhoneNumber()));
@@ -90,7 +90,6 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
         else{
             ((AddUser)msg).responseParameters();
         }
-        return msg;
     }
     private void login(Object msg){
         if(((Login)msg).getPhoneNumber()!=""&&((Login)msg).getUserName()!="")
@@ -156,14 +155,14 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
         }
     }
     
-    private Object removeUser(Object msg){
+    private void removeUser(Object msg){
         if(((RemoveUser)msg).getTergetGroup()!=""&&((RemoveUser)msg).getUserPhoneNumber()!=""){
             if(_groups.containsKey(((RemoveUser)msg).getTergetGroup())){
                 if( _groups.get(((RemoveUser)msg).getTergetGroup()).containUser(_users.get(((RemoveUser)msg).getUserPhoneNumber()))){
                     for (User user : _groups.get(((RemoveUser)msg).getTergetGroup()).getUsers()) {
                         if(user.getCookie().getValue().compareTo(((RemoveUser)msg).getRequestingCookie())!=0){
                                     ((RemoveUser)msg).setCode("403");
-                                    return msg;
+                                    break;
                         }
                     }
                     _groups.get(((RemoveUser)msg).getTergetGroup()).removeMember(_users.get(((RemoveUser)msg).getUserPhoneNumber()));
@@ -180,7 +179,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
         else{
             ((RemoveUser)msg).responseParameters();
         }
-        return msg;
+        
     }
     
     private void massegeQueue(Object msg){
@@ -217,4 +216,5 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
             ((Send)msg).responseParameters();
         }
     }
+    
 }

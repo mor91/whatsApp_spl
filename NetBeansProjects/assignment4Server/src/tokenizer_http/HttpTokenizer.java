@@ -37,6 +37,7 @@ public class HttpTokenizer<T> implements tokenizer.Tokenizer{
                 else stringBuilder.append((char)c);
             }
         } catch (IOException ex) {
+            _isAlive=false;
             Logger.getLogger(HttpTokenizer.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
