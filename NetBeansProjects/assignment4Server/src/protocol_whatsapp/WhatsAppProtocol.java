@@ -22,37 +22,48 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
     
     @Override
     public Object processMessage(Object msg) {
-        if(((RequestURI)msg).getCode().compareTo("404")==0){
-            return msg;
-        }
+        ResponseURI response=null;
+        /*if(((RequestURI)msg).getCode().compareTo("404")==0){
+            response=new ResponseURI(null, null, "404");
+            return response;
+        }*/
         switch(((RequestURI)msg).getUriType()){
             case "AddUser":
                 addUSer(msg);
+                response=new ResponseURI(((AddUser)msg).getResponseMassegeBody(), null, ((AddUser)msg).getCode());
                 break;
             case"Login":
                 login(msg);
+                response=new ResponseURI(((Login)msg).getResponseMassegeBody(), ((Login)msg).getHeaders(), ((Login)msg).getCode());
                 break;
             case "Logout":
                 logout(msg);
+                response=new ResponseURI(((Logout)msg).getResponseMassegeBody(), null,((Logout)msg).getCode());
                 break;
             case "CreateGroup":
                 createGroup(msg);
+                response=new ResponseURI(((CreateGroup)msg).getResponseMassegeBody(), null, ((Logout)msg).getCode());
                 break;
             case "List":
                 list(msg);
+                response=new ResponseURI(((List)msg).getResponseMassegeBody(), null, ((List)msg).getCode());
                 break;
             case "RemoveUser":
                 removeUser(msg);
+                response=new ResponseURI(((RemoveUser)msg).getResponseMassegeBody(), null, ((RemoveUser)msg).getCode());
                 break;
             case "MassegeQueue":
                 massegeQueue(msg);
+                response=new ResponseURI(((MassegesQueue)msg).getResponseMassegeBody(), null, ((MassegesQueue)msg).getCode());
                 break;
             case "Send":
                 send(msg);
+               // response=new ResponseURI(((Send)msg).g, null, null);
                 break;
-            default: 
+            default: response=new ResponseURI(null, null, "404");
+                break;
         }
-        return msg;
+        return response;
        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -97,9 +108,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
             if(!_users.containsKey(((Login)msg).getPhoneNumber())){
                 User user=new User(((Login)msg).getUserName(), ((Login)msg).getPhoneNumber());
                 _users.put(((Login)msg).getPhoneNumber(),user);
-                ((Login)msg).massegeSuccess();
-                ((Login)msg).setCookie(user.getCookie().getValue());
-                
+                ((Login)msg).massegeSuccess(user);
             }
             else {
                 ((Login)msg).responseUserExist();

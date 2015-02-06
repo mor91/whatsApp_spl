@@ -28,5 +28,9 @@ public class Logout extends RequestURI{
         this._responseMassegeBody.add("Googbye");
         this.setCode("200");
     }
+
+    public Vector<String> getResponseMassegeBody() {
+        return _responseMassegeBody;
+    }
     
 }

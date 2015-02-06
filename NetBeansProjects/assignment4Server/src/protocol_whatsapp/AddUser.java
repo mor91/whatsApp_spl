@@ -53,5 +53,9 @@ public class AddUser extends RequestURI{
         this._responseMassegeBody.add("ERROR 999: User not found");
         this.setCode("405");
     }
+
+    public Vector<String> getResponseMassegeBody() {
+        return _responseMassegeBody;
+    }
     
 }

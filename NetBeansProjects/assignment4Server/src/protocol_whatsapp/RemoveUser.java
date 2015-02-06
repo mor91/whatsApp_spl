@@ -46,4 +46,9 @@ public class RemoveUser extends RequestURI{
         this._responseMassegeBody.add("ERROR 777: user not in group");
         this.setCode("405");
     }
+
+    public Vector<String> getResponseMassegeBody() {
+        return _responseMassegeBody;
+    }
+    
 }

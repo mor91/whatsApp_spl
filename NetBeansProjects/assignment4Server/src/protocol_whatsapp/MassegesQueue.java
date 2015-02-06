@@ -40,4 +40,8 @@ public class MassegesQueue extends RequestURI{
         this.setCode("200");
     }
 
+    public Vector<String> getResponseMassegeBody() {
+        return _responseMassegeBody;
+    }
+
 }

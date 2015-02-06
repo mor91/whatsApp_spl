@@ -51,5 +51,9 @@ public class CreateGroup extends RequestURI{
         this._responseMassegeBody.add("Group "+_groupName+" Created");
         this.setCode("200");
     }
+
+    public Vector<String> getResponseMassegeBody() {
+        return _responseMassegeBody;
+    }
     
 }
