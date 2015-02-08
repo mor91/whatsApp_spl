@@ -22,7 +22,7 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
     
     @Override
     public Object processMessage(Object msg) {
-        ResponseURI response=null;
+        ResponseHTTP response=null;
         /*if(((RequestURI)msg).getCode().compareTo("404")==0){
             response=new ResponseURI(null, null, "404");
             return response;
@@ -30,37 +30,37 @@ public class WhatsAppProtocol<T> implements protocol.ServerProtocol{
         switch(((RequestURI)msg).getUriType()){
             case "AddUser":
                 addUSer(msg);
-                response=new ResponseURI(((AddUser)msg).getResponseMassegeBody(), null, ((AddUser)msg).getCode());
+                response=new ResponseHTTP(((AddUser)msg).getResponseMassegeBody(), null, ((AddUser)msg).getCode());
                 break;
             case"Login":
                 login(msg);
-                response=new ResponseURI(((Login)msg).getResponseMassegeBody(), ((Login)msg).getHeaders(), ((Login)msg).getCode());
+                response=new ResponseHTTP(((Login)msg).getResponseMassegeBody(), ((Login)msg).getHeaders(), ((Login)msg).getCode());
                 break;
             case "Logout":
                 logout(msg);
-                response=new ResponseURI(((Logout)msg).getResponseMassegeBody(), null,((Logout)msg).getCode());
+                response=new ResponseHTTP(((Logout)msg).getResponseMassegeBody(), null,((Logout)msg).getCode());
                 break;
             case "CreateGroup":
                 createGroup(msg);
-                response=new ResponseURI(((CreateGroup)msg).getResponseMassegeBody(), null, ((Logout)msg).getCode());
+                response=new ResponseHTTP(((CreateGroup)msg).getResponseMassegeBody(), null, ((Logout)msg).getCode());
                 break;
             case "List":
                 list(msg);
-                response=new ResponseURI(((List)msg).getResponseMassegeBody(), null, ((List)msg).getCode());
+                response=new ResponseHTTP(((List)msg).getResponseMassegeBody(), null, ((List)msg).getCode());
                 break;
             case "RemoveUser":
                 removeUser(msg);
-                response=new ResponseURI(((RemoveUser)msg).getResponseMassegeBody(), null, ((RemoveUser)msg).getCode());
+                response=new ResponseHTTP(((RemoveUser)msg).getResponseMassegeBody(), null, ((RemoveUser)msg).getCode());
                 break;
             case "MassegeQueue":
                 massegeQueue(msg);
-                response=new ResponseURI(((MassegesQueue)msg).getResponseMassegeBody(), null, ((MassegesQueue)msg).getCode());
+                response=new ResponseHTTP(((MassegesQueue)msg).getResponseMassegeBody(), null, ((MassegesQueue)msg).getCode());
                 break;
             case "Send":
                 send(msg);
                // response=new ResponseURI(((Send)msg).g, null, null);
                 break;
-            default: response=new ResponseURI(null, null, "404");
+            default: response=new ResponseHTTP(null, null, "404");
                 break;
         }
         return response;

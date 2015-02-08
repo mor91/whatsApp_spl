@@ -6,11 +6,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.URLEncoder;
 
 import protocol.ServerProtocol;
+import protocol_whatsapp.ResponseHTTP;
 import tokenizer.Tokenizer;
 
-public class ConnectionHandler<T> implements Runnable {
+public class ConnectionHandlerThreadPerClient<T> implements Runnable {
 
 	private BufferedReader in;
 	private PrintWriter out;
@@ -18,7 +20,7 @@ public class ConnectionHandler<T> implements Runnable {
 	ServerProtocol<T> protocol;
 	Tokenizer<T> tokenizer;
 
-	public ConnectionHandler(Socket acceptedSocket, ServerProtocol<T> p, Tokenizer<T> t)
+	public ConnectionHandlerThreadPerClient(Socket acceptedSocket, ServerProtocol<T> p, Tokenizer<T> t)
 	{
 		in = null;
 		out = null;
@@ -64,7 +66,9 @@ public class ConnectionHandler<T> implements Runnable {
 			System.out.println(response);
 			if (response != null)
 			{
-				out.println(response);
+                            String buf=URLEncoder.encode(((ResponseHTTP)response).getHTTPResponse().toString(), "UTF-8");
+                            clientSocket.getOutputStream().write(buf.getBytes());
+                            out.println(response);
 			}
 
 			if (protocol.isEnd(msg))
@@ -79,6 +83,7 @@ public class ConnectionHandler<T> implements Runnable {
 	public void initialize() throws IOException
 	{
 		// Initialize I/O
+                
 		in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(),"UTF-8"));
 		out = new PrintWriter(clientSocket.getOutputStream());
 		tokenizer.addInputStream(new InputStreamReader(clientSocket.getInputStream(),"UTF-8"));

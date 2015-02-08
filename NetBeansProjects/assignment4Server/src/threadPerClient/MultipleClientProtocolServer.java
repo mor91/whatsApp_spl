@@ -38,7 +38,7 @@ public class MultipleClientProtocolServer<T> implements Runnable {
 		while (true)
 		{
 			try {
-				ConnectionHandler newConnection = new ConnectionHandler(serverSocket.accept(), _protocolFactory.create(),_tokenizerFactory.create());
+				ConnectionHandlerThreadPerClient  newConnection = new ConnectionHandlerThreadPerClient(serverSocket.accept(), _protocolFactory.create(),_tokenizerFactory.create());
 				new Thread(newConnection).start();
 			}
 			catch (IOException e)

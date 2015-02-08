@@ -12,12 +12,12 @@ import org.apache.http.protocol.ResponseContent;
  *
  * @author chen
  */
-public class ResponseURI {
+public class ResponseHTTP {
     private Vector<String> _massegeBody;
     private Vector<String> _headers;
     private String _code;
 
-    public ResponseURI(Vector<String> _massegeBody, Vector<String> _headers ,String code) {
+    public ResponseHTTP(Vector<String> _massegeBody, Vector<String> _headers ,String code) {
         this._massegeBody = _massegeBody;
         this._headers = _headers;
         this._code=code;
